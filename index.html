@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DMOJ local judge</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="/js/jquery.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="/js/bootstrap.min.js"></script>
+    <style>
+        #home-panel, #queue-panel {
+            display: none
+        }
+    </style>
+    <script>
+        var $ = require('./js/jquery.min.js');
+        $(document).ready(function () {
+            $('#filter').keyup(function () {
+                var rex = new RegExp($(this).val(), 'i');
+                $('.searchable tr').hide();
+                $('.searchable tr').filter(function () {
+                    return rex.test($(this).text());
+                }).show();
+            });
+            // ew
+            $('#home-tab').click(function () {
+                $('#problem-panel').hide();
+                $('#queue-panel').hide();
+                $('#home-panel').show();
+                $('#home-tab').attr({'class': 'active'});
+                $('#problem-tab').attr({'class': ''});
+                $('#queue-tab').attr({'class': ''});
+            });
+            $('#problem-tab').click(function () {
+                $('#home-panel').hide();
+                $('#queue-panel').hide();
+                $('#problem-panel').show();
+                $('#problem-tab').attr({'class': 'active'});
+                $('#home-tab').attr({'class': ''});
+                $('#queue-tab').attr({'class': ''});
+            });
+            $('#queue-tab').click(function () {
+                $('#home-panel').hide();
+                $('#problem-panel').hide();
+                $('#queue-panel').show();
+                $('#queue-tab').attr({'class': 'active'});
+                $('#home-tab').attr({'class': ''});
+                $('#problem-tab').attr({'class': ''});
+            });
+        });
+    </script>
+</head>
+<body>
+<br/>
+<ul class="nav nav-tabs" role="tablist">
+    <li id="home-tab" role="presentation"><a href="#">Home</a></li>
+    <li id="problem-tab" role="presentation" class="active"><a href="#">Problems <span class="badge">6</span></a></li>
+    <li id="queue-tab" role="presentation"><a href="#">Queue <span class="badge">667</span></a></li>
+</ul>
+<br/><br/>
+
+<div id="problem-panel">
+    <div class="container">
+        <div class="panel panel-primary">
+            <div class="panel-heading">Problems</div>
+            <div class="panel-body">
+                <div class="input-group">
+                <span class="input-group-addon" id="sizing-addon1">
+                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                </span>
+                    <input id="filter" type="text" class="form-control" placeholder="Search problems..."
+                           aria-describedby="sizing-addon1">
+                </div>
+            </div>
+            <table class="table table-hover table-striped header-fixed">
+                <thead>
+                <tr>
+                    <th>Code</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody class="searchable">
+                <tr>
+                    <td style="width:100%;vertical-align: middle">
+                        dmpg15s1
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-default">
+                            <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:100%;vertical-align: middle">
+                        dmpg15s2
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-menu-right"
+                                                                            aria-hidden="true"></span></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:100%;vertical-align: middle">
+                        dmpg15s3
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-menu-right"
+                                                                            aria-hidden="true"></span></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:100%;vertical-align: middle">
+                        dmpg15s4
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-menu-right"
+                                                                            aria-hidden="true"></span></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:100%;vertical-align: middle">
+                        dmpg15s5
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-menu-right"
+                                                                            aria-hidden="true"></span></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:100%;vertical-align: middle">
+                        dmpg15s6
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-menu-right"
+                                                                            aria-hidden="true"></span></button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<div id="home-panel">
+    <div class="container">
+        <div class="jumbotron">
+            <h1>Hello, world!</h1>
+
+            <p>...</p>
+
+            <p><a class="btn btn-primary btn-lg" href="#" role="button">Start judging</a></p>
+        </div>
+    </div>
+</div>
+
+<div id="queue-panel">
+    <h1>TODO</h1>
+</div>
+</body>
+</html>
