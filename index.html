@@ -55,8 +55,8 @@
             window.current_tab = $('#problem-panel').fadeIn(750);
             window.current_label = $('#problem-tab').addClass('active');
             window.switch_tab = function (new_tab, label) {
-                window.current_tab.fadeOut(100);
-                window.current_tab = new_tab.fadeIn(100);
+                window.current_tab.hide();
+                window.current_tab = new_tab.show();
                 if (label) {
                     window.current_label.removeClass('active');
                     window.current_label = label.addClass('active');
