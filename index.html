@@ -6,8 +6,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/fixedsticky.css">
+    <!--WTF? Must load twice to work-->
+    <script src="js/jquery.min.js"></script>
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/fixedsticky.js"></script>
     <style>
         #home-panel, #queue-panel, #problem-detail {
             display: none;
@@ -16,6 +20,15 @@
 
         nav {
             padding-bottom: 1em;
+            position: sticky;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 500;
+        }
+
+        nav ul {
+            background: #fff;
         }
 
         #loading {
@@ -39,9 +52,10 @@
             height: 50vmin;
         }
     </style>
-    <script>
+    <script type="text/javascript">
         var ipc = require('ipc');
         var problem_count = 0;
+
         ipc.on('problem-list', function (data) {
             for (var i in data) {
                 $('#problem-list-body').append('<tr><td style="width:100%;vertical-align:middle">' +
@@ -82,7 +96,6 @@
         }).on('problem-data', function (data) {
             $('#problem-data').text(data);
         });
-        var $ = require('./js/jquery.min.js');
         $(document).ready(function () {
             $('#filter').keyup(function () {
                 var rex = new RegExp($(this).val(), 'i');
@@ -90,6 +103,7 @@
                     return rex.test($(this).text());
                 }).show();
             });
+            $('nav').fixedsticky();
         });
     </script>
 </head>
