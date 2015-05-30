@@ -9,7 +9,7 @@
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <style>
-        #home-panel, #queue-panel, #problem-panel, #problem-detail {
+        #home-panel, #queue-panel, #problem-detail {
             display: none;
             margin: 0 1em;
         }
@@ -20,6 +20,16 @@
 
         #loading {
             position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.25);
+            z-index: 1000;
+        }
+
+        #loading div {
+            position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -31,13 +41,16 @@
     </style>
     <script>
         var ipc = require('ipc');
+        var problem_count = 0;
         ipc.on('problem-list', function (data) {
             for (var i in data) {
                 $('#problem-list-body').append('<tr><td style="width:100%;vertical-align:middle">' +
                         data[i] +
                         '</td><td><button type="button" class="btn btn-default problem-detail"><span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></button></td></tr>');
             }
-            $('#problem-count-badge').append(data.length);
+            problem_count += data.length;
+        }).on('problem-list-done', function (data) {
+            $('#problem-count-badge').append(problem_count);
             $('#loading').fadeOut(500);
             window.current_tab = $('#problem-panel').fadeIn(750);
             window.current_label = $('#problem-tab').addClass('active');
@@ -92,7 +105,7 @@
 </ul>
 </nav>
 
-<div id="loading"></div>
+<div id="loading"><div></div></div>
 
 <div id="problem-panel">
     <div class="container">

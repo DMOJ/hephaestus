@@ -30,15 +30,16 @@ app.on('ready', function () {
     mainWindow.webContents.on('did-finish-load', function () {
         var wrench = require('wrench');
 
-        var ls = [];
         wrench.readdirRecursive(dir, function (error, files) {
             if (files === null) {
-                mainWindow.webContents.send('problem-list', ls);
+                mainWindow.webContents.send('problem-list-done');
             } else {
+                var ls = [];
                 files.forEach(function (file) {
                     if (file.endsWith('\\init.json'))
                         ls.push(file.replace('\\init.json', ''));
                 });
+                mainWindow.webContents.send('problem-list', ls);
             }
         });
     });
