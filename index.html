@@ -12,7 +12,7 @@
             display: none
         }
 
-        #loading div {
+        #loading {
             position: fixed;
             top: 50%;
             left: 50%;
@@ -37,15 +37,6 @@
             $('#loading').hide('slow');
             $('#main').show('slow');
             $('#problem-count-badge').append(data.length);
-        });
-        var $ = require('./js/jquery.min.js');
-        $(document).ready(function () {
-            $('#filter').keyup(function () {
-                var rex = new RegExp($(this).val(), 'i');
-                $('.searchable tr').hide().filter(function () {
-                    return rex.test($(this).text());
-                }).show();
-            });
             // ew
             $('#home-tab').click(function () {
                 $('#problem-panel').hide();
@@ -72,21 +63,32 @@
                 $('#problem-tab').attr({'class': ''});
             });
         });
+        var $ = require('./js/jquery.min.js');
+        $(document).ready(function () {
+            $('#filter').keyup(function () {
+                var rex = new RegExp($(this).val(), 'i');
+                $('.searchable tr').hide().filter(function () {
+                    return rex.test($(this).text());
+                }).show();
+            });
+        });
     </script>
 </head>
 <body>
 <br/>
 
-<div id="loading"><div></div></div>
-
-<div style="display: none" id="main">
 <ul class="nav nav-tabs" role="tablist">
     <li id="home-tab" role="presentation"><a href="#">Home</a></li>
     <li id="problem-tab" role="presentation" class="active"><a href="#">Problems <span id="problem-count-badge"
                                                                                        class="badge"></span></a></li>
     <li id="queue-tab" role="presentation"><a href="#">Queue <span class="badge">667</span></a></li>
 </ul>
+
 <br/><br/>
+
+<div id="loading"></div>
+
+<div style="display: none" id="main">
 
 <div id="problem-panel">
     <div class="container">
