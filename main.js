@@ -27,10 +27,21 @@ app.on('ready', function () {
 
 
     mainWindow.webContents.on('did-finish-load', function () {
-        mainWindow.webContents.send('problem-list', [
-            'dmpg15b1', 'dmpg15b2', 'dmpg15b3', 'dmpg15b4', 'dmpg15b5', 'dmpg15b6',
-            'dmpg15s1', 'dmpg15s2', 'dmpg15s3', 'dmpg15s4', 'dmpg15s5', 'dmpg15s6',
-            'dmpg15g1', 'dmpg15g2', 'dmpg15g3', 'dmpg15g4', 'dmpg15g5', 'dmpg15g6']);
+        var wrench = require("wrench");
+
+        // TODO: configurable
+        var files = wrench.readdirSyncRecursive("C:\\Users\\Tudor\\Dropbox\\problems\\");
+
+        var ls = [];
+        for(var i = 0; i < files.length; i++) {
+            var file = files[i];
+            if(file.endsWith("\\init.json")) {
+                ls.push(file.replace("\\init.json", ""));
+            }
+        }
+
+        console.log(ls);
+        mainWindow.webContents.send('problem-list', ls);
     });
 
     // Emitted when the window is closed.
