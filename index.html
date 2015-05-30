@@ -16,16 +16,18 @@
             position: fixed;
             top: 50%;
             left: 50%;
-            margin: -128px 0 0 -128px;
+            transform: translate(-50%, -50%);
             background: url('img/load.svg');
             background-size: 100% auto;
-            width: 256px;
-            height: 256px;
+            width: 50vmin;
+            height: 50vmin;
         }
     </style>
     <script>
         var ipc = require('ipc');
         ipc.on('problem-list', function (data) {
+            $('#loading').hide('slow');
+            $('#main').show('slow');
             console.log('test data, received:' + data);
             for (var i in data) {
                 $('#problem-list-body').append("<tr><td style=\"width:100%;vertical-align:middle\">" +
