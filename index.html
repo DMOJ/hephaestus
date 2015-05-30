@@ -5,17 +5,29 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="/js/jquery.min.js"></script>
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <script src="/js/bootstrap.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
     <style>
         #home-panel, #queue-panel {
             display: none
+        }
+
+        #loading div {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            margin: -128px 0 0 -128px;
+            background: url('img/load.svg');
+            background-size: 100% auto;
+            width: 256px;
+            height: 256px;
         }
     </style>
     <script>
         var ipc = require('ipc');
         ipc.on('problem-list', function (data) {
+            $('#loading').hide('slow');
+            $('#main').show('slow');
             console.log('test data, received:' + data);
             for (var i in data) {
                 $('#problem-list-body').append("<tr><td style=\"width:100%;vertical-align:middle\">" +
@@ -62,6 +74,10 @@
 </head>
 <body>
 <br/>
+
+<div id="loading"><div></div></div>
+
+<div style="display: none" id="main">
 <ul class="nav nav-tabs" role="tablist">
     <li id="home-tab" role="presentation"><a href="#">Home</a></li>
     <li id="problem-tab" role="presentation" class="active"><a href="#">Problems <span id="problem-count-badge"
@@ -113,6 +129,7 @@
 
 <div id="queue-panel">
     <h1>TODO</h1>
+</div>
 </div>
 </body>
 </html>
