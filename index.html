@@ -32,8 +32,8 @@
                         '</td><td><button type="button" class="btn btn-default problem-detail"><span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></button></td></tr>');
             }
             $('#problem-count-badge').append(data.length);
-            $('#loading').hide('slow');
-            window.current_tab = $('#problem-panel').show('slow');
+            $('#loading').fadeOut(500);
+            window.current_tab = $('#problem-panel').fadeIn(750);
             window.current_label = $('#problem-tab').addClass('active');
             window.switch_tab = function (new_tab, label) {
                 window.current_tab.hide();
