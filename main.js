@@ -27,21 +27,20 @@ app.on('ready', function () {
 
 
     mainWindow.webContents.on('did-finish-load', function () {
-        var wrench = require("wrench");
-
-        // TODO: configurable
-        var files = wrench.readdirSyncRecursive("C:\\Users\\Tudor\\Dropbox\\problems\\");
+        var wrench = require('wrench');
 
         var ls = [];
-        for(var i = 0; i < files.length; i++) {
-            var file = files[i];
-            if(file.endsWith("\\init.json")) {
-                ls.push(file.replace("\\init.json", ""));
+        // TODO: configurable
+        wrench.readdirRecursive('D:\\Dropbox\\problems\\', function (error, files) {
+            if (files === null) {
+                mainWindow.webContents.send('problem-list', ls);
+            } else {
+                files.forEach(function (file) {
+                if (file.endsWith('\\init.json'))
+                    ls.push(file.replace('\\init.json', ''));
+                });
             }
-        }
-
-        console.log(ls);
-        mainWindow.webContents.send('problem-list', ls);
+        });
     });
 
     // Emitted when the window is closed.

@@ -26,7 +26,6 @@
     <script>
         var ipc = require('ipc');
         ipc.on('problem-list', function (data) {
-            console.log('test data, received:' + data);
             for (var i in data) {
                 $('#problem-list-body').append('<tr><td style="width:100%;vertical-align:middle">' +
                         data[i] +
