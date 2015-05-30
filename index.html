@@ -67,6 +67,13 @@
         }).on('problem-list-done', function (data) {
             $('#loading').fadeOut(500);
             $('#problem-count-badge').text(problem_count);
+            $('.problem-detail').click(function () {
+                var code = $(this).parents('tr').find('td:first-child').text();
+                var page = $('#problem-detail');
+                page.find('h1').text(code);
+                ipc.send('query-problem-data', code);
+                switch_tab(page);
+            });
             if (initialized) return;
             window.current_tab = $('#problem-panel');
             window.current_label = $('#problem-tab').addClass('active');
@@ -87,13 +94,6 @@
             });
             $('#queue-tab').click(function () {
                 switch_tab($('#queue-panel'), $('#queue-tab'));
-            });
-            $('.problem-detail').click(function () {
-                var code = $(this).parents('tr').find('td:first-child').text();
-                var page = $('#problem-detail');
-                page.find('h1').text(code);
-                ipc.send('query-problem-data', code);
-                switch_tab(page);
             });
             $('#reload-problems').click(function () {
                 $('#problem-list-body').empty();
