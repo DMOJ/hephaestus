@@ -6,6 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <style>
         #home-panel, #queue-panel, #problem-panel, #problem-detail {
@@ -57,8 +58,11 @@
                 var code = $(this).parents('tr').find('td:first-child').text();
                 var page = $('#problem-detail');
                 page.find('h1').text(code);
+                ipc.send('query-problem-data', code);
                 switch_tab(page);
             })
+        }).on('problem-data', function (data) {
+            $('#problem-data').text(data);
         });
         var $ = require('./js/jquery.min.js');
         $(document).ready(function () {
@@ -132,6 +136,7 @@
 
 <div id="problem-detail">
     <h1></h1>
+    <pre id="problem-data"></pre>
 </div>
 
 </body>

@@ -25,13 +25,13 @@ app.on('ready', function () {
     // and load the index.html of the app.
     mainWindow.loadUrl('file://' + __dirname + '/index.html');
 
-
+    // TODO: configurable
+    var dir = 'D:\\Dropbox\\problems\\';
     mainWindow.webContents.on('did-finish-load', function () {
         var wrench = require('wrench');
 
         var ls = [];
-        // TODO: configurable
-        wrench.readdirRecursive('D:\\Dropbox\\problems\\', function (error, files) {
+        wrench.readdirRecursive(dir, function (error, files) {
             if (files === null) {
                 mainWindow.webContents.send('problem-list', ls);
             } else {
@@ -40,6 +40,12 @@ app.on('ready', function () {
                         ls.push(file.replace('\\init.json', ''));
                 });
             }
+        });
+    });
+
+    require('ipc').on('query-problem-data', function (event, data) {
+        require('fs').readFile(dir + '\\' + data + '\\init.json', function (err, data) {
+            event.sender.send('problem-data', data.toString());
         });
     });
 
