@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <script src="js/bootstrap.min.js"></script>
     <style>
-        #home-panel, #queue-panel {
+        #home-panel, #queue-panel, #problem-panel {
             display: none
         }
 
@@ -26,41 +26,33 @@
     <script>
         var ipc = require('ipc');
         ipc.on('problem-list', function (data) {
-            $('#loading').hide('slow');
-            $('#main').show('slow');
             console.log('test data, received:' + data);
             for (var i in data) {
                 $('#problem-list-body').append("<tr><td style=\"width:100%;vertical-align:middle\">" +
                         data[i] +
                         "</td><td><button type=\"button\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-menu-right\" aria-hidden=\"true\"></span></button></td></tr>")
             }
-            $('#loading').hide('slow');
-            $('#main').show('slow');
             $('#problem-count-badge').append(data.length);
-            // ew
+            $('#loading').hide('slow');
+            window.current_tab = $('#problem-panel').show('slow');
+            window.current_label = $('#problem-tab').addClass('active');
+            window.switch_tab = function (new_tab, label) {
+                window.current_tab.hide();
+                window.current_tab = new_tab.show();
+                if (label) {
+                    window.current_label.removeClass('active');
+                    window.current_label = label.addClass('active');
+                }
+            };
+
             $('#home-tab').click(function () {
-                $('#problem-panel').hide();
-                $('#queue-panel').hide();
-                $('#home-panel').show();
-                $('#home-tab').attr({'class': 'active'});
-                $('#problem-tab').attr({'class': ''});
-                $('#queue-tab').attr({'class': ''});
+                switch_tab($('#home-panel'), $('#home-tab'));
             });
             $('#problem-tab').click(function () {
-                $('#home-panel').hide();
-                $('#queue-panel').hide();
-                $('#problem-panel').show();
-                $('#problem-tab').attr({'class': 'active'});
-                $('#home-tab').attr({'class': ''});
-                $('#queue-tab').attr({'class': ''});
+                switch_tab($('#problem-panel'), $('#problem-tab'));
             });
             $('#queue-tab').click(function () {
-                $('#home-panel').hide();
-                $('#problem-panel').hide();
-                $('#queue-panel').show();
-                $('#queue-tab').attr({'class': 'active'});
-                $('#home-tab').attr({'class': ''});
-                $('#problem-tab').attr({'class': ''});
+                switch_tab($('#queue-panel'), $('#queue-tab'));
             });
         });
         var $ = require('./js/jquery.min.js');
@@ -87,8 +79,6 @@
 <br/><br/>
 
 <div id="loading"></div>
-
-<div style="display: none" id="main">
 
 <div id="problem-panel">
     <div class="container">
@@ -134,6 +124,6 @@
 <div id="queue-panel">
     <h1>TODO</h1>
 </div>
-</div>
+
 </body>
 </html>
