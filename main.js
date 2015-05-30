@@ -36,8 +36,8 @@ app.on('ready', function () {
                 mainWindow.webContents.send('problem-list', ls);
             } else {
                 files.forEach(function (file) {
-                if (file.endsWith('\\init.json'))
-                    ls.push(file.replace('\\init.json', ''));
+                    if (file.endsWith('\\init.json'))
+                        ls.push(file.replace('\\init.json', ''));
                 });
             }
         });
