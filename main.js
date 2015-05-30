@@ -27,7 +27,7 @@ app.on('ready', function () {
 
     // TODO: configurable
     var dir = 'D:\\Dropbox\\problems\\';
-    mainWindow.webContents.on('did-finish-load', function () {
+    require('ipc').on('load-problems', function () {
         var wrench = require('wrench');
 
         wrench.readdirRecursive(dir, function (error, files) {
@@ -42,9 +42,7 @@ app.on('ready', function () {
                 mainWindow.webContents.send('problem-list', ls);
             }
         });
-    });
-
-    require('ipc').on('query-problem-data', function (event, data) {
+    }).on('query-problem-data', function (event, data) {
         require('fs').readFile(dir + '\\' + data + '\\init.json', function (err, data) {
             event.sender.send('problem-data', data.toString());
         });

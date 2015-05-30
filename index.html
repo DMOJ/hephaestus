@@ -55,6 +55,7 @@
     <script type="text/javascript">
         var ipc = require('ipc');
         var problem_count = 0;
+        var initialized = false;
 
         ipc.on('problem-list', function (data) {
             for (var i in data) {
@@ -64,9 +65,10 @@
             }
             problem_count += data.length;
         }).on('problem-list-done', function (data) {
-            $('#problem-count-badge').append(problem_count);
             $('#loading').fadeOut(500);
-            window.current_tab = $('#problem-panel').fadeIn(750);
+            $('#problem-count-badge').text(problem_count);
+            if (initialized) return;
+            window.current_tab = $('#problem-panel');
             window.current_label = $('#problem-tab').addClass('active');
             window.switch_tab = function (new_tab, label) {
                 window.current_tab.hide();
@@ -92,7 +94,14 @@
                 page.find('h1').text(code);
                 ipc.send('query-problem-data', code);
                 switch_tab(page);
-            })
+            });
+            $('#reload-problems').click(function () {
+                $('#problem-list-body').empty();
+                problem_count = 0;
+                ipc.send('load-problems');
+                $('#loading').fadeIn(500);
+            });
+            initialized = true;
         }).on('problem-data', function (data) {
             $('#problem-data').text(data);
         });
@@ -104,6 +113,7 @@
                 }).show();
             });
             $('nav').fixedsticky();
+            ipc.send('load-problems');
         });
     </script>
 </head>
@@ -125,7 +135,7 @@
     <div class="container">
         <div class="panel panel-primary">
             <div class="panel-heading">Problems <button type="button" class="btn btn-default btn-xs pull-right">
-                <span class="glyphicon glyphicon-refresh"></span></button></div>
+                <span id="reload-problems" class="glyphicon glyphicon-refresh"></span></button></div>
             <div class="panel-body">
                 <div class="input-group">
                 <span class="input-group-addon" id="sizing-addon1">
