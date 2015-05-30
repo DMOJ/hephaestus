@@ -55,7 +55,6 @@
     <script type="text/javascript">
         var ipc = require('ipc');
         var problem_count = 0;
-        var initialized = false;
 
         ipc.on('problem-list', function (data) {
             for (var i in data) {
@@ -74,7 +73,10 @@
                 ipc.send('query-problem-data', code);
                 switch_tab(page);
             });
-            if (initialized) return;
+        }).on('problem-data', function (data) {
+            $('#problem-data').text(data);
+        });
+        $(document).ready(function () {
             window.current_tab = $('#problem-panel');
             window.current_label = $('#problem-tab').addClass('active');
             window.switch_tab = function (new_tab, label) {
@@ -101,11 +103,6 @@
                 ipc.send('load-problems');
                 $('#loading').fadeIn(500);
             });
-            initialized = true;
-        }).on('problem-data', function (data) {
-            $('#problem-data').text(data);
-        });
-        $(document).ready(function () {
             $('#filter').keyup(function () {
                 var rex = new RegExp($(this).val(), 'i');
                 $('.searchable tr').hide().filter(function () {
