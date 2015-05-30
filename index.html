@@ -10,7 +10,12 @@
     <script src="js/bootstrap.min.js"></script>
     <style>
         #home-panel, #queue-panel, #problem-panel, #problem-detail {
-            display: none
+            display: none;
+            margin: 0 1em;
+        }
+
+        nav {
+            padding-bottom: 1em;
         }
 
         #loading {
@@ -37,8 +42,8 @@
             window.current_tab = $('#problem-panel').fadeIn(750);
             window.current_label = $('#problem-tab').addClass('active');
             window.switch_tab = function (new_tab, label) {
-                window.current_tab.fadeOut();
-                window.current_tab = new_tab.fadeIn(200);
+                window.current_tab.fadeOut(100);
+                window.current_tab = new_tab.fadeIn(100);
                 if (label) {
                     window.current_label.removeClass('active');
                     window.current_label = label.addClass('active');
@@ -78,14 +83,14 @@
 <body>
 <br/>
 
+<nav>
 <ul class="nav nav-tabs" role="tablist">
     <li id="home-tab" role="presentation"><a href="#">Home</a></li>
     <li id="problem-tab" role="presentation" class="active"><a href="#">Problems <span id="problem-count-badge"
                                                                                        class="badge"></span></a></li>
     <li id="queue-tab" role="presentation"><a href="#">Queue <span class="badge">667</span></a></li>
 </ul>
-
-<br/><br/>
+</nav>
 
 <div id="loading"></div>
 
