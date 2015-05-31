@@ -109,6 +109,16 @@
                     return rex.test($(this).text());
                 }).show();
             });
+            $('#problem-submit').click(function () {
+                var code = $('#problem-detail').find('h1').text();
+                var tab = $('<li/>', {id: 'submit-' + code, role: 'presentation'}).append(
+                    $('<a/>', {href: '#'}).text(code)
+                        .prepend('<span class="glyphicon glyphicon-pencil"/>')
+                        .append($('<span class="glyphicon glyphicon-remove"/></span>').click(function () {
+                            tab.remove();
+                        }))
+                ).appendTo($('.nav-tabs'));
+            });
             $('nav').fixedsticky();
             ipc.send('load-problems');
         });
@@ -175,6 +185,11 @@
 
 <div id="problem-detail">
     <h1></h1>
+    <button id="problem-submit" type="button" class="btn btn-default">
+        <span class="glyphicon glyphicon-pencil"></span>
+        Submit
+    </button>
+    <br>
     <pre id="problem-data"></pre>
 </div>
 
