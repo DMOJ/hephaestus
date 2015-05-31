@@ -87,6 +87,42 @@
             width: 50vmin;
             height: 50vmin;
         }
+
+        .scroller {
+            text-align: center;
+            cursor: pointer;
+            display: none;
+            padding: 7px;
+            padding-top: 11px;
+            white-space: no-wrap;
+            vertical-align: middle;
+            background-color: #fff;
+        }
+
+        #nav-tabs-wrapper {
+            position: relative;
+            margin: 0 auto;
+            overflow: hidden;
+            padding: 5px;
+            height: 50px;
+        }
+
+        .nav-tabs {
+            position: absolute;
+            left: 0;
+            top: 0;
+            min-width: 3000px;
+            margin-left: 12px;
+            margin-top: 0px;
+        }
+
+        #scroller-right{
+            float:right;
+        }
+
+        #scroller-left {
+            float:left;
+        }
     </style>
     <script type="text/javascript">
         var ipc = require('ipc');
@@ -112,6 +148,7 @@
         }).on('problem-data', function (data) {
             $('#problem-data').text(data);
         });
+
         $(document).ready(function () {
             window.current_tab = $('#problem-panel');
             window.current_label = $('#problem-tab').addClass('active');
@@ -123,6 +160,40 @@
                     window.current_label = label.addClass('active');
                 }
             };
+
+            function tabs_width() {
+                var width = 0;
+                $('.nav-tabs').find('li').each(function() {
+                    width += $(this).outerWidth();
+                });
+                return width;
+            }
+
+            $(window).on('resize', window.update_scroller = function () {
+                var left = $('.nav-tabs').position().left, width = tabs_width();
+                if ($('#nav-tabs-wrapper').outerWidth() < width) 
+                    $('#scroller-right').show();
+                else
+                    $('#scroller-right').hide();
+
+                if (left < 0)
+                    $('#scroller-left').show();
+                else
+                    $('#scroller-left').hide();
+            }).resize();
+
+            $('#scroller-right').click(function() {
+                $('#scroller-left').fadeIn('slow');
+                $('#scroller-right').fadeOut('slow');
+                var delta = $('#nav-tabs-wrapper').outerWidth() - tabs_width() - $('.nav-tabs').position().left - 40;
+                $('.nav-tabs').animate({left: '+=' + delta +'px'}, 'slow');
+            });
+
+            $('#scroller-left').click(function() {
+                $('#scroller-right').fadeIn('slow');
+                $('#scroller-left').fadeOut('slow');
+                $('.nav-tabs').animate({left: '-=' + $('.nav-tabs').position().left + 'px'}, 'slow');
+            });
 
             $('#home-tab').click(function () {
                 switch_tab($('#home-panel'), $('#home-tab'));
@@ -170,6 +241,7 @@
                             switch_tab(panel, tab);
                         }).appendTo($('.nav-tabs'));
                 switch_tab(panel, tab);
+                update_scroller();
             });
             $('#fullscreen').click(function () {
                 ipc.send('fullscreen');
@@ -180,13 +252,19 @@
 </head>
 <body>
 <nav>
-    <ul class="nav nav-tabs" role="tablist">
-        <li id="home-tab" role="presentation"><a href="#">Home</a></li>
-        <li id="problem-tab" role="presentation" class="active"><a href="#">Problems <span id="problem-count-badge"
-                                                                                           class="badge"></span></a>
-        </li>
-        <li id="queue-tab" role="presentation"><a href="#">Queue <span class="badge">667</span></a></li>
-    </ul>
+    <div style="flex: 1">
+        <div class="scroller" id="scroller-left"><i class="glyphicon glyphicon-chevron-left"></i></div>
+        <div class="scroller" id="scroller-right"><i class="glyphicon glyphicon-chevron-right"></i></div>
+        <div id="nav-tabs-wrapper">
+            <ul class="nav nav-tabs" role="tablist">
+                <li id="home-tab" role="presentation"><a href="#">Home</a></li>
+                <li id="problem-tab" role="presentation" class="active"><a href="#">Problems <span id="problem-count-badge"
+                                                                                                   class="badge"></span></a>
+                </li>
+                <li id="queue-tab" role="presentation"><a href="#">Queue <span class="badge">667</span></a></li>
+            </ul>
+        </div>
+    </div>
     <button class="btn btn-default" id="fullscreen"><span class="glyphicon glyphicon-fullscreen"></span></button>
 </nav>
 
