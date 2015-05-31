@@ -30,7 +30,7 @@ Judge.prototype.send = function (packet) {
 	});
 };
 
-Judge.prototype.listen = function (port, host) {
+Judge.prototype.listen = function (port, host, callback) {
 	var judge = this;
 	this.socket = net.createServer({}, function (c) {
 		console.log('client connected');
@@ -67,13 +67,16 @@ Judge.prototype.listen = function (port, host) {
 			console.log(exc);
 			c.destroy();
 		});
+	}).listen(port, host, function (server) {
+		judge.address = judge.socket.address();
+		if (typeof callback !== 'undefined')
+			callback(judge);
 	});
-	this.socket.listen(port, host);
 	return this;
 };
 
 module.exports = {
 	create: function (port, host) {
-		return new Judge().listen(port, host);
+		return new Judge();
 	}
 }

@@ -2,7 +2,9 @@ var app = require('app');  // Module to control application life.
 var BrowserWindow = require('browser-window');  // Module to create native browser window.
 
 
-require('./judge').create(9999);
+require('./judge').create().listen(0, '127.0.0.1', function (judge) {
+    console.log(judge.address);
+});
 
 // Report crashes to our server.
 require('crash-reporter').start();
