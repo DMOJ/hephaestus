@@ -1,0 +1,4 @@
+[submodule "ace"]
+	path = ace
+	url = https://github.com/DMOJ/hephaestus-ace.git
+	branch = master
