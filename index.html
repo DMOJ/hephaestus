@@ -60,16 +60,16 @@
             right: 0;
         }
 
-        .submission-panel .panel, .submission-panel .panel-body, .editor {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
+        .submission-panel .panel-primary {
+            height: calc(100% - 1em);
+        }
+
+        .editor {
+            height: 100%;
         }
 
         .submission-panel .panel-body {
-            top: 40px;
+            height: calc(100% - 82px);
         }
 
         #loading {
@@ -132,8 +132,18 @@
     <script type="text/javascript">
         var ipc = require('ipc');
         var problem_count = 0;
+        var executors = [
+            {key: 'CS', name: 'C#', ace: 'csharp'},
+            {key: 'JAVA', name: 'Java', ace: 'java'},
+        ];
+        var supported = {};
 
-        ipc.on('new-problems', function () {
+        ipc.on('executors', function (list) {
+            supported = {};
+            list.forEach(function (i) {
+                supported[i] = true;
+            });
+        }).on('new-problems', function () {
             problem_count = 0;
             $('#problem-list-body').empty();
             $('#loading').fadeIn(500);
@@ -244,16 +254,25 @@
             });
             $('#problem-submit').click(function () {
                 var code = $('#problem-detail').find('h1').text();
+                var lang = $('<select class="language"/>');
+                executors.forEach(function (i) {
+                    if (i.key in supported)
+                        lang.append($('<option/>', {value: i.key, 'data-ace': i.ace}).text(i.name));
+                });
                 var panel = $('<div class="tab-panel submission-panel"/>')
-                        .append($('<div class="panel panel-primary"/>')
-                                .append($('<div class="panel-heading"/>').text('Submit ' + code))
-                                .append($('<div class="panel-body" style="padding:0"/>"')
-                                        .append($('<div class="editor"/>').text('function foo(items) {\n    var x = "All this is syntax highlighted";\n    return x;\n}'))))
-                        .appendTo('main');
+                    .append($('<div class="panel panel-primary"/>')
+                        .append($('<div class="panel-heading"/>').text('Submit ' + code))
+                        .append($('<div class="panel-body" style="padding:0"/>"')
+                                .append($('<div class="editor"/>').text('function foo(items) {\n    var x = "All this is syntax highlighted";\n    return x;\n}')))
+                        .append($('<div class="panel-footer"/>').append(lang)))
+                    .appendTo('main');
 
                 var editor = ace.edit(panel.find('.editor').get(0));
                 editor.setTheme('ace/theme/github');
                 editor.getSession().setMode('ace/mode/javascript');
+                lang.change(function () {
+                    editor.getSession().setMode('ace/mode/' + lang.find('option:selected').attr('data-ace'));
+                });
                 var tab = $('<li style="min-width:140px"/>', {id: 'submit-' + code, role: 'presentation'})
                         .append($('<a/>', {href: '#'}).text(code)
                                 .prepend('<span class="glyphicon glyphicon-pencil"/>')

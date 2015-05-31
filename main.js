@@ -34,6 +34,7 @@ app.on('ready', function () {
                 mainWindow.webContents.send('problem-list', [item[0]]);
             });
             mainWindow.webContents.send('problem-list-done');
+            mainWindow.webContents.send('executors', judge.executors);
         })
     });
 
@@ -65,6 +66,8 @@ app.on('ready', function () {
     mainWindow.webContents.on('new-window', function (event, url) {
         event.preventDefault();
     });
+
+    mainWindow.openDevTools();
 
     // Emitted when the window is closed.
     mainWindow.on('closed', function () {

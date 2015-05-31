@@ -12,6 +12,7 @@ Judge.prototype.process = function (packet) {
 	switch (packet.name) {
 		case 'handshake':
 			this.problems = packet.problems;
+			this.executors = packet.executors;
 			this.emit('connected', packet.id, packet.key, packet.problems);
 			this.send({name: 'handshake-success'});
 			break;
