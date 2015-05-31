@@ -21,6 +21,11 @@
             display: flex;
             flex-flow: column;
             height: 100%;
+            -webkit-user-select: none;
+        }
+
+        pre {
+            -webkit-user-select: text;
         }
 
         main {
@@ -42,8 +47,16 @@
             right: 0;
         }
 
-        .editor {
-            height:83vh;
+        .submission-panel .panel, .submission-panel .panel-body, .editor {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .submission-panel .panel-body {
+            top: 40px;
         }
 
         #loading {
