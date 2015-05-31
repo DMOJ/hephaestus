@@ -43,6 +43,7 @@
         main {
             flex: 1;
             overflow-y: auto;
+            overflow-x: hidden;
             position: relative;
         }
 
@@ -147,12 +148,8 @@
                 var page = $('#problem-detail');
                 page.find('h1').text(code);
                 ipc.send('query-problem-data', code);
-                switch_tab(page);
+                switch_tab(page, null, 'slideLeft');
             });
-            for (var i = 0; i < 10; ++i) {
-                $('.problem-detail').get(i).click();
-                $('#problem-submit').click();
-            }
         }).on('problem-data', function (data) {
             $('#problem-data').text(data);
         });
@@ -160,9 +157,15 @@
         $(document).ready(function () {
             window.current_tab = $('#problem-panel');
             window.current_label = $('#problem-tab').addClass('active');
-            window.switch_tab = function (new_tab, label) {
-                window.current_tab.hide();
-                window.current_tab = new_tab.show();
+            window.switch_tab = function (new_tab, label, animation) {
+                if (animation == 'slideLeft') {
+                    window.current_tab.hide('slide', {direction: 'left'}, 500);
+                    new_tab.show('slide', {direction: 'right'}, 500);
+                } else {
+                    window.current_tab.hide();
+                    new_tab.show();
+                }
+                window.current_tab = new_tab;
                 if (label) {
                     window.current_label.removeClass('active');
                     window.current_label = label.addClass('active');
