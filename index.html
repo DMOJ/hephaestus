@@ -234,10 +234,10 @@
                 var editor = ace.edit(panel.find('.editor').get(0));
                 editor.setTheme('ace/theme/github');
                 editor.getSession().setMode('ace/mode/javascript');
-                var tab = $('<li/>', {id: 'submit-' + code, role: 'presentation'})
+                var tab = $('<li style="min-width:140px"/>', {id: 'submit-' + code, role: 'presentation'})
                         .append($('<a/>', {href: '#'}).text(code)
                                 .prepend('<span class="glyphicon glyphicon-pencil"/>')
-                                .append($('<span class="glyphicon glyphicon-remove"/></span>').click(function () {
+                                .append($('<span class="glyphicon glyphicon-remove" style="float:right;padding-left:10px"/></span>').click(function () {
                                     tab.remove();
                                     panel.remove();
                                     if (current_label == tab)
