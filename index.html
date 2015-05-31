@@ -42,12 +42,8 @@
             right: 0;
         }
 
-        .editor { 
-            position: absolute;
-            bottom: 1em;
-            top: 70px;
-            left: 0;
-            right: 0;
+        .editor {
+            height:83vh;
         }
 
         #loading {
@@ -131,23 +127,27 @@
             $('#problem-submit').click(function () {
                 var code = $('#problem-detail').find('h1').text();
                 var panel = $('<div class="tab-panel submission-panel"/>')
-                    .append('<h1>Submit ' + code + '</h1>')
-                    .append($('<div class="editor"/>').text('function foo(items) {\n    var x = "All this is syntax highlighted";\n    return x;\n}')).appendTo('main');
+                        .append($('<div class="panel panel-primary"/>')
+                                .append($('<div class="panel-heading"/>').text('Submit ' + code))
+                                .append($('<div class="panel-body" style="padding:0"/>"')
+                                        .append($('<div class="editor"/>').text('function foo(items) {\n    var x = "All this is syntax highlighted";\n    return x;\n}'))))
+                        .appendTo('main');
+
                 var editor = ace.edit(panel.find('.editor').get(0));
-                editor.setTheme('ace/theme/monokai');
+                editor.setTheme('ace/theme/github');
                 editor.getSession().setMode('ace/mode/javascript');
                 var tab = $('<li/>', {id: 'submit-' + code, role: 'presentation'})
-                    .append($('<a/>', {href: '#'}).text(code)
-                        .prepend('<span class="glyphicon glyphicon-pencil"/>')
-                        .append($('<span class="glyphicon glyphicon-remove"/></span>').click(function () {
-                            tab.remove();
-                            panel.remove();
-                            if (current_label == tab)
-                                switch_tab($('#problem-panel'), $('#problem-tab'));
-                        })))
-                    .click(function () {
-                        switch_tab(panel, tab);
-                    }).appendTo($('.nav-tabs'));
+                        .append($('<a/>', {href: '#'}).text(code)
+                                .prepend('<span class="glyphicon glyphicon-pencil"/>')
+                                .append($('<span class="glyphicon glyphicon-remove"/></span>').click(function () {
+                                    tab.remove();
+                                    panel.remove();
+                                    if (current_label == tab)
+                                        switch_tab($('#problem-panel'), $('#problem-tab'));
+                                })))
+                        .click(function () {
+                            switch_tab(panel, tab);
+                        }).appendTo($('.nav-tabs'));
                 switch_tab(panel, tab);
             });
             ipc.send('load-problems');
@@ -156,70 +156,75 @@
 </head>
 <body>
 <nav>
-<ul class="nav nav-tabs" role="tablist">
-    <li id="home-tab" role="presentation"><a href="#">Home</a></li>
-    <li id="problem-tab" role="presentation" class="active"><a href="#">Problems <span id="problem-count-badge"
-                                                                                       class="badge"></span></a></li>
-    <li id="queue-tab" role="presentation"><a href="#">Queue <span class="badge">667</span></a></li>
-</ul>
+    <ul class="nav nav-tabs" role="tablist">
+        <li id="home-tab" role="presentation"><a href="#">Home</a></li>
+        <li id="problem-tab" role="presentation" class="active"><a href="#">Problems <span id="problem-count-badge"
+                                                                                           class="badge"></span></a>
+        </li>
+        <li id="queue-tab" role="presentation"><a href="#">Queue <span class="badge">667</span></a></li>
+    </ul>
 </nav>
 
 <main>
-<div id="loading"><div></div></div>
+    <div id="loading">
+        <div></div>
+    </div>
 
-<div id="problem-panel" class="tab-panel">
-    <div class="container">
-        <div class="panel panel-primary">
-            <div class="panel-heading">Problems <button type="button" class="btn btn-default btn-xs pull-right">
-                <span id="reload-problems" class="glyphicon glyphicon-refresh"></span></button></div>
-            <div class="panel-body">
-                <div class="input-group">
+    <div id="problem-panel" class="tab-panel">
+        <div class="container">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Problems
+                    <button type="button" class="btn btn-default btn-xs pull-right">
+                        <span id="reload-problems" class="glyphicon glyphicon-refresh"></span></button>
+                </div>
+                <div class="panel-body">
+                    <div class="input-group">
                 <span class="input-group-addon" id="sizing-addon1">
                     <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                 </span>
-                    <input id="filter" type="text" class="form-control" placeholder="Search problems..."
-                           aria-describedby="sizing-addon1">
+                        <input id="filter" type="text" class="form-control" placeholder="Search problems..."
+                               aria-describedby="sizing-addon1">
+                    </div>
                 </div>
+                <table class="table table-hover table-striped header-fixed">
+                    <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody id="problem-list-body" class="searchable">
+                    </tbody>
+                </table>
             </div>
-            <table class="table table-hover table-striped header-fixed">
-                <thead>
-                <tr>
-                    <th>Code</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody id="problem-list-body" class="searchable">
-                </tbody>
-            </table>
         </div>
     </div>
-</div>
 
-<div id="home-panel" class="tab-panel">
-    <div class="container">
-        <div class="jumbotron">
-            <h1>Hello, world!</h1>
+    <div id="home-panel" class="tab-panel">
+        <div class="container">
+            <div class="jumbotron">
+                <h1>Hello, world!</h1>
 
-            <p>...</p>
+                <p>...</p>
 
-            <p><a class="btn btn-primary btn-lg" href="#" role="button">Start judging</a></p>
+                <p><a class="btn btn-primary btn-lg" href="#" role="button">Start judging</a></p>
+            </div>
         </div>
     </div>
-</div>
 
-<div id="queue-panel" class="tab-panel">
-    <h1>TODO</h1>
-</div>
+    <div id="queue-panel" class="tab-panel">
+        <h1>TODO</h1>
+    </div>
 
-<div id="problem-detail" class="tab-panel">
-    <h1></h1>
-    <button id="problem-submit" type="button" class="btn btn-default">
-        <span class="glyphicon glyphicon-pencil"></span>
-        Submit
-    </button>
-    <br>
-    <pre id="problem-data"></pre>
-</div>
+    <div id="problem-detail" class="tab-panel">
+        <h1></h1>
+        <button id="problem-submit" type="button" class="btn btn-default">
+            <span class="glyphicon glyphicon-pencil"></span>
+            Submit
+        </button>
+        <br>
+        <pre id="problem-data"></pre>
+    </div>
 </main>
 </body>
 </html>
