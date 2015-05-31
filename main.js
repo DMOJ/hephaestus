@@ -46,6 +46,8 @@ app.on('ready', function () {
         require('fs').readFile(dir + '\\' + data + '\\init.json', function (err, data) {
             event.sender.send('problem-data', data.toString());
         });
+    }).on('fullscreen', function () {
+        mainWindow.setFullScreen(!mainWindow.isFullScreen());
     });
 
     mainWindow.webContents.on('new-window', function (event, url) {

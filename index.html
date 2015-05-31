@@ -23,6 +23,14 @@
             height: 100%;
         }
 
+        nav {
+            display: flex;
+        }
+
+        nav ul {
+            flex: 1;
+        }
+
         main {
             flex: 1;
             overflow-y: auto;
@@ -158,6 +166,9 @@
                         }).appendTo($('.nav-tabs'));
                 switch_tab(panel, tab);
             });
+            $('#fullscreen').click(function () {
+                ipc.send('fullscreen');
+            });
             ipc.send('load-problems');
         });
     </script>
@@ -171,6 +182,7 @@
         </li>
         <li id="queue-tab" role="presentation"><a href="#">Queue <span class="badge">667</span></a></li>
     </ul>
+    <button class="btn btn-default" id="fullscreen"><span class="glyphicon glyphicon-fullscreen"></span></button>
 </nav>
 
 <main>
