@@ -9,7 +9,25 @@ function Judge() {
 require('util').inherits(Judge, require('events').EventEmitter);
 
 Judge.prototype.process = function (packet) {
-	console.log(packet.name);
+	switch (packet.name) {
+		case 'handshake':
+			this.problems = packet.problems;
+			this.emit('connected', packet.id, packet.key, packet.problems);
+			this.send({name: 'handshake-success'});
+			break;
+		default:
+			console.log('Unknown packet: ' + packet.name);
+	}
+};
+
+Judge.prototype.send = function (packet) {
+	var c = this.conn;
+	zlib.deflate(JSON.stringify(packet), function (err, data) {
+		var size = new Buffer(4);
+		size.writeUInt32BE(data.length, 0);
+		c.write(size);
+		c.write(data);
+	});
 };
 
 Judge.prototype.listen = function (port, host) {
@@ -27,7 +45,7 @@ Judge.prototype.listen = function (port, host) {
 			c._buf = Buffer.concat([c._buf, buf]);
 			while (true) {
 				if (c._size === null && c._buf.length >= 4) {
-					c._size = c._buf.readInt32BE(0);
+					c._size = c._buf.readUInt32BE(0);
 					c._buf = c._buf.slice(4);
 					continue;
 				}
