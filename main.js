@@ -47,7 +47,10 @@ app.on('ready', function () {
             event.sender.send('problem-data', data.toString());
         });
     });
-    mainWindow.openDevTools();
+
+    mainWindow.webContents.on('new-window', function (event, url) {
+        event.preventDefault();
+    });
 
     // Emitted when the window is closed.
     mainWindow.on('closed', function () {
