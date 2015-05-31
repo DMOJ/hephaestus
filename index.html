@@ -10,6 +10,7 @@
     <script src="js/jquery.min.js"></script>
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.easing.1.3.js"></script>
     <script src="ace/ace.js" type="text/javascript" charset="utf-8"></script>
     <style>
         html, body {
@@ -188,14 +189,14 @@
             $('#scroller-right').mousedown(function() {
                 var left = $('.nav-tabs').position().left;
                 console.log(left - $('#nav-tabs-wrapper').outerWidth() + tabs_width());
-                $('.nav-tabs').animate({left: $('#nav-tabs-wrapper').outerWidth() - tabs_width()}, 5 * (left - $('#nav-tabs-wrapper').outerWidth() + tabs_width()));
+                $('.nav-tabs').animate({left: $('#nav-tabs-wrapper').outerWidth() - tabs_width()}, 2 * (left - $('#nav-tabs-wrapper').outerWidth() + tabs_width()), 'easeInCubic');
             }).on('mouseup mouseleave', function () {
                 $('.nav-tabs').stop()
             });
 
             $('#scroller-left').mousedown(function() {
                 var left = $('.nav-tabs').position().left;
-                $('.nav-tabs').animate({left: 0}, -$('.nav-tabs').position().left * 5);
+                $('.nav-tabs').animate({left: 0}, -$('.nav-tabs').position().left * 2, 'easeInCubic');
             }).on('mouseup mouseleave', function () {
                 $('.nav-tabs').stop()
             });
