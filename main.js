@@ -1,11 +1,6 @@
 var app = require('app');  // Module to control application life.
 var BrowserWindow = require('browser-window');  // Module to create native browser window.
 
-
-require('./judge').create().listen(0, '127.0.0.1', function (judge) {
-    console.log(judge.address);
-});
-
 // Report crashes to our server.
 require('crash-reporter').start();
 
@@ -29,9 +24,22 @@ app.on('ready', function () {
     // and load the index.html of the app.
     mainWindow.loadUrl('file://' + __dirname + '/index.html');
 
+
+    var ipc = require('ipc');
+    require('./judge').create().listen(0, '127.0.0.1', function (judge) {
+        console.log(judge.address);
+        judge.on('connected', function (id, key, problems) {
+            mainWindow.webContents.send('new-problems');
+            problems.forEach(function (item) {
+                mainWindow.webContents.send('problem-list', [item[0]]);
+            });
+            mainWindow.webContents.send('problem-list-done');
+        })
+    });
+
     // TODO: configurable
     var dir = 'D:\\Dropbox\\problems\\';
-    require('ipc').on('load-problems', function () {
+    ipc.on('load-problems', function () {
         var wrench = require('wrench');
 
         wrench.readdirRecursive(dir, function (error, files) {
