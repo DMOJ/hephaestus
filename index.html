@@ -177,19 +177,26 @@
                 return width;
             }
 
+            var scroller_visible = false;
             $(window).on('resize', window.update_scroller = function () {
                 var left = $('.nav-tabs').position().left, width = tabs_width();
                 var space = $('#nav-tabs-wrapper').outerWidth();
                 if (space < width) {
-                    $('#scroller-right').show();
-                    $('#scroller-left').show();
+                    if (!scroller_visible) {
+                        $('#scroller-right').show('slide', {direction: 'left'}, 500);
+                        $('#scroller-left').show('slide', {direction: 'right'}, 500);
+                    }
+                    scroller_visible = true;
                     var max = space - width;
                     if (max > left)
-                        $('.nav-tabs').animate({left: max}, (max - left) * 2, 'easeInCubic');
+                        $('.nav-tabs').animate({left: max});
                 } else {
-                    $('#scroller-right').hide();
-                    $('#scroller-left').hide();
-                    $('.nav-tabs').animate({left: 0}, -left * 2, 'easeInCubic');
+                    if (scroller_visible) {
+                        $('#scroller-right').hide('slide', {direction: 'right'}, 500);
+                        $('#scroller-left').hide('slide', {direction: 'left'}, 500);
+                        $('.nav-tabs').animate({left: 0}, -left * 2, 'easeInCubic');
+                    }
+                    scroller_visible = false;
                 }
             }).resize();
 
