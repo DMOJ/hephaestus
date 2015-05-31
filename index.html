@@ -134,10 +134,42 @@
         var ipc = require('ipc');
         var problem_count = 0;
         var executors = [
+            {key: 'BF', name: 'Brain****', ace: 'plain_text'},
+            {key: 'C', name: 'C', ace: 'c_cpp'},
+            {key: 'CPP', name: 'C++', ace: 'c_cpp'},
+            {key: 'CPP11', name: 'C++11', ace: 'c_cpp'},
+            {key: 'CPP14', name: 'C++14', ace: 'c_cpp'},
             {key: 'CS', name: 'C#', ace: 'csharp'},
-            {key: 'JAVA', name: 'Java', ace: 'java'},
+            {key: 'D', name: 'D', ace: 'd'},
+            {key: 'FS', name: 'F#', ace: 'fsharp'},
+            {key: 'F95', name: 'Fortran', ace: 'fortran'},
+            {key: 'GO', name: 'Go', ace: 'golang'},
+            {key: 'HASK', name: 'Haskell', ace: 'haskell'},
+            {key: 'JAVA', name: 'Java 7', ace: 'java'},
+            {key: 'LUA', name: 'Lua', ace: 'lua'},
+            {key: 'NASM', name: 'NASM', ace: 'assembly_x86'},
+            {key: 'OBJC', name: 'Objective-C', ace: 'objectivec'},
+            {key: 'OCAML', name: 'OCaml', ace: 'ocaml'},
+            {key: 'PERL', name: 'Perl', ace: 'perl'},
+            {key: 'PAS', name: 'Pascal', ace: 'pas'},
+            {key: 'PY2', name: 'Python 2', ace: 'python'},
+            {key: 'PY3', name: 'Python 3', ace: 'python'},
+            {key: 'PYPY', name: 'PyPy 2', ace: 'python'},
+            {key: 'PYPY3', name: 'PyPy 3', ace: 'python'},
+            {key: 'RUBY18', name: 'Ruby 1.8', ace: 'ruby'},
+            {key: 'RUBY19', name: 'Ruby 1.9', ace: 'ruby'},
+            {key: 'RUBY21', name: 'Ruby 2.1', ace: 'ruby'},
+            {key: 'V8JS', name: 'JavaScript', ace: 'javascript'},
+            {key: 'VC', name: 'Visual C++', ace: 'c_cpp'},
         ];
-        var supported = {};
+        var supported = {
+            'BF': true, 'C': true, 'CPP': true, 'CPP11': true, 'CPP14': true, 'CS': true,
+            'D': true, 'FS': true, 'F95': true, 'GO': true, 'HASK': true, 'JAVA': true,
+            'LUA': true, 'NASM': true, 'OBJC': true, 'OCAML': true, 'PERL': true,
+            'PAS': true, 'PY2': true, 'PY3': true, 'PYPY': true, 'PYPY3': true, 'RUBY18': true,
+            'RUBY19': true, 'RUBY21': true, 'V8JS': true, 'VC': true
+        };
+        var def_lang = 'PY2';
 
         ipc.on('executors', function (list) {
             supported = {};
@@ -256,10 +288,6 @@
             $('#problem-submit').click(function () {
                 var code = $('#problem-detail').find('h1').text();
                 var lang = $('<select class="language"/>');
-                executors.forEach(function (i) {
-                    if (i.key in supported)
-                        lang.append($('<option/>', {value: i.key, 'data-ace': i.ace}).text(i.name));
-                });
                 var panel = $('<div class="tab-panel submission-panel"/>')
                     .append($('<div class="panel panel-primary"/>')
                         .append($('<div class="panel-heading"/>').text('Submit ' + code))
@@ -269,8 +297,17 @@
                     .appendTo('main');
 
                 var editor = ace.edit(panel.find('.editor').get(0));
+                executors.forEach(function (i) {
+                    if (i.key in supported) {
+                        var opts = {value: i.key, 'data-ace': i.ace};
+                        if (i.key == def_lang) {
+                            editor.getSession().setMode('ace/mode/' + i.ace);
+                            opts['selected'] = 'selected';
+                        }
+                        lang.append($('<option/>', opts).text(i.name));
+                    }
+                });
                 editor.setTheme('ace/theme/github');
-                editor.getSession().setMode('ace/mode/javascript');
                 lang.change(function () {
                     editor.getSession().setMode('ace/mode/' + lang.find('option:selected').attr('data-ace'));
                 });
