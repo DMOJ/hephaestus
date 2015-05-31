@@ -6,29 +6,44 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/fixedsticky.css">
     <!--WTF? Must load twice to work-->
     <script src="js/jquery.min.js"></script>
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script src="js/fixedsticky.js"></script>
+    <script src="ace/ace.js" type="text/javascript" charset="utf-8"></script>
     <style>
+        html, body {
+            height: 100%;
+            margin: 0
+        }
+
+        body {
+            display: flex;
+            flex-flow: column;
+            height: 100%;
+        }
+
+        main {
+            flex: 1;
+            overflow-y: scroll;
+            position: relative;
+        }
+
         #home-panel, #queue-panel, #problem-detail {
             display: none;
-            margin: 0 1em;
         }
 
-        nav {
-            padding-bottom: 1em;
-            position: sticky;
+        .tab-panel {
+            margin: 1em 1em 0 1em;
+            position: absolute;
             top: 0;
+            bottom: 0;
             left: 0;
             right: 0;
-            z-index: 500;
         }
 
-        nav ul {
-            background: #fff;
+        .editor { 
+            height: calc(100% - 70px - 1em);
         }
 
         #loading {
@@ -111,22 +126,31 @@
             });
             $('#problem-submit').click(function () {
                 var code = $('#problem-detail').find('h1').text();
-                var tab = $('<li/>', {id: 'submit-' + code, role: 'presentation'}).append(
-                    $('<a/>', {href: '#'}).text(code)
+                var panel = $('<div class="tab-panel submission-panel"/>')
+                    .append('<h1>Submit ' + code + '</h1>')
+                    .append($('<div class="editor"/>').text('function foo(items) {\n    var x = "All this is syntax highlighted";\n    return x;\n}')).appendTo('main');
+                var editor = ace.edit(panel.find('.editor').get(0));
+                editor.setTheme('ace/theme/monokai');
+                editor.getSession().setMode('ace/mode/javascript');
+                var tab = $('<li/>', {id: 'submit-' + code, role: 'presentation'})
+                    .append($('<a/>', {href: '#'}).text(code)
                         .prepend('<span class="glyphicon glyphicon-pencil"/>')
                         .append($('<span class="glyphicon glyphicon-remove"/></span>').click(function () {
                             tab.remove();
-                        }))
-                ).appendTo($('.nav-tabs'));
+                            panel.remove();
+                            if (current_label == tab)
+                                switch_tab($('#problem-panel'), $('#problem-tab'));
+                        })))
+                    .click(function () {
+                        switch_tab(panel, tab);
+                    }).appendTo($('.nav-tabs'));
+                switch_tab(panel, tab);
             });
-            $('nav').fixedsticky();
             ipc.send('load-problems');
         });
     </script>
 </head>
 <body>
-<br/>
-
 <nav>
 <ul class="nav nav-tabs" role="tablist">
     <li id="home-tab" role="presentation"><a href="#">Home</a></li>
@@ -136,9 +160,10 @@
 </ul>
 </nav>
 
+<main>
 <div id="loading"><div></div></div>
 
-<div id="problem-panel">
+<div id="problem-panel" class="tab-panel">
     <div class="container">
         <div class="panel panel-primary">
             <div class="panel-heading">Problems <button type="button" class="btn btn-default btn-xs pull-right">
@@ -166,8 +191,7 @@
     </div>
 </div>
 
-
-<div id="home-panel">
+<div id="home-panel" class="tab-panel">
     <div class="container">
         <div class="jumbotron">
             <h1>Hello, world!</h1>
@@ -179,11 +203,11 @@
     </div>
 </div>
 
-<div id="queue-panel">
+<div id="queue-panel" class="tab-panel">
     <h1>TODO</h1>
 </div>
 
-<div id="problem-detail">
+<div id="problem-detail" class="tab-panel">
     <h1></h1>
     <button id="problem-submit" type="button" class="btn btn-default">
         <span class="glyphicon glyphicon-pencil"></span>
@@ -192,6 +216,6 @@
     <br>
     <pre id="problem-data"></pre>
 </div>
-
+</main>
 </body>
 </html>
