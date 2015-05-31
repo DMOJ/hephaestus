@@ -189,14 +189,14 @@
             $('#scroller-right').mousedown(function() {
                 var left = $('.nav-tabs').position().left;
                 console.log(left - $('#nav-tabs-wrapper').outerWidth() + tabs_width());
-                $('.nav-tabs').animate({left: $('#nav-tabs-wrapper').outerWidth() - tabs_width()}, 2 * (left - $('#nav-tabs-wrapper').outerWidth() + tabs_width()), 'easeInCubic');
+                $('.nav-tabs').animate({left: $('#nav-tabs-wrapper').outerWidth() - tabs_width()}, 2 * (left - $('#nav-tabs-wrapper').outerWidth() + tabs_width()), 'easeInQuart');
             }).on('mouseup mouseleave', function () {
                 $('.nav-tabs').stop()
             });
 
             $('#scroller-left').mousedown(function() {
                 var left = $('.nav-tabs').position().left;
-                $('.nav-tabs').animate({left: 0}, -$('.nav-tabs').position().left * 2, 'easeInCubic');
+                $('.nav-tabs').animate({left: 0}, -$('.nav-tabs').position().left * 2, 'easeInQuart');
             }).on('mouseup mouseleave', function () {
                 $('.nav-tabs').stop()
             });
