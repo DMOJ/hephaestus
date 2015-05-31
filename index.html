@@ -159,8 +159,8 @@
             window.current_label = $('#problem-tab').addClass('active');
             window.switch_tab = function (new_tab, label, animation) {
                 if (animation == 'slideRight') {
-                    window.current_tab.hide('slide', {direction: 'right'}, 200);
-                    new_tab.show('slide', {direction: 'left'}, 200);
+                    window.current_tab.hide('slide', {direction: 'right', easing: 'easeInOutQuad'}, 500);
+                    new_tab.show('slide', {direction: 'left', easing: 'easeInOutQuad'}, 500);
                 } else {
                     window.current_tab.hide();
                     new_tab.show();
