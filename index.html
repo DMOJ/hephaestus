@@ -52,7 +52,7 @@
         }
 
         .tab-panel {
-            margin: 1em 1em 0 1em;
+            margin: 0em 1em 0 1em;
             position: absolute;
             top: 0;
             bottom: 0;
@@ -148,7 +148,7 @@
                 var page = $('#problem-detail');
                 page.find('h1').text(code);
                 ipc.send('query-problem-data', code);
-                switch_tab(page, null, 'slideLeft');
+                switch_tab(page, null, 'slideRight');
             });
         }).on('problem-data', function (data) {
             $('#problem-data').text(data);
@@ -158,9 +158,9 @@
             window.current_tab = $('#problem-panel');
             window.current_label = $('#problem-tab').addClass('active');
             window.switch_tab = function (new_tab, label, animation) {
-                if (animation == 'slideLeft') {
-                    window.current_tab.hide('slide', {direction: 'left'}, 500);
-                    new_tab.show('slide', {direction: 'right'}, 500);
+                if (animation == 'slideRight') {
+                    window.current_tab.hide('slide', {direction: 'right'}, 200);
+                    new_tab.show('slide', {direction: 'left'}, 200);
                 } else {
                     window.current_tab.hide();
                     new_tab.show();
@@ -297,6 +297,7 @@
     </div>
 
     <div id="problem-panel" class="tab-panel">
+        <br/>
         <div class="container">
             <div class="panel panel-primary">
                 <div class="panel-heading">Problems
