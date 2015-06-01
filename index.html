@@ -316,17 +316,17 @@
             $('#problem-submit').click(function () {
                 var code = $('#problem-detail').find('h1').text();
                 var lang = $('<select class="language"/>');
-                var submit = $('<div class="panel-footer"/>')
-                    .append(lang)
-                    .append($('<button class="btn btn-primary btn-large pull-right submission-submit"/>')
-                        .text('Submit')
-                        .prepend($('<span class="glyphicon glyphicon-share"/>')));
+                var submit = $('<button class="btn btn-primary btn-large pull-right submission-submit"/>')
+                    .text('Submit')
+                    .prepend($('<span class="glyphicon glyphicon-share"/>'));
                 var panel = $('<div class="tab-panel submission-panel"/>')
                     .append($('<div class="panel panel-primary submission-edit-panel"/>')
                         .append($('<div class="panel-heading"/>').text('Submit ' + code))
                         .append($('<div class="panel-body" style="padding:0"/>"')
                                 .append($('<div class="editor"/>').text('function foo(items) {\n    var x = "All this is syntax highlighted";\n    return x;\n}')))
-                        .append(submit))
+                        .append($('<div class="panel-footer"/>')
+                            .append(lang)
+                            .append(submit)))
                     .append($('<div class="submission-status"/>').hide()
                         .append($('<h1/>').text('Grading...'))
                         .append($('<button class="btn btn-primary btn-large pull-right submission-resubmit"/>')
