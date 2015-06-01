@@ -174,6 +174,22 @@
             'RUBY19': true, 'RUBY21': true, 'V8JS': true, 'VC': true
         };
         var def_lang = 'PY2';
+        var sub_queue = [];
+        var sub_id = 0;
+        // int key -> jQuery of status panel
+        var sub_map = {};
+        var grading = false;
+
+        function grade(code, status) {
+            sub_map[++sub_id] = status;
+            if (grading)
+                sub_queue.push([sub_id, code]);
+            else {
+                grading = true;
+                ipc.send('grade', sub_id, code);
+            }
+            return sub_id;
+        }
 
         ipc.on('executors', function (list) {
             supported = {};
@@ -203,6 +219,14 @@
             });
         }).on('problem-data', function (data) {
             $('#problem-data').text(data);
+        }).on('grading-done', function (id) {
+            console.log('Got done: ' + id)
+            sub_map[id].append($('<h1/>').append('Done'));
+            delete sub_map[id];
+            if (sub_queue.length) {
+                ipc.send('grade', sub_queue[0][0], sub_queue[0][1]);
+                sub_queue.unshift();
+            }
         });
 
         $(document).ready(function () {
@@ -292,16 +316,25 @@
             $('#problem-submit').click(function () {
                 var code = $('#problem-detail').find('h1').text();
                 var lang = $('<select class="language"/>');
+                var submit = $('<div class="panel-footer"/>')
+                    .append(lang)
+                    .append($('<button class="btn btn-primary btn-large pull-right submission-submit"/>')
+                        .text('Submit')
+                        .prepend($('<span class="glyphicon glyphicon-share"/>')));
                 var panel = $('<div class="tab-panel submission-panel"/>')
-                    .append($('<div class="panel panel-primary"/>')
+                    .append($('<div class="panel panel-primary submission-edit-panel"/>')
                         .append($('<div class="panel-heading"/>').text('Submit ' + code))
                         .append($('<div class="panel-body" style="padding:0"/>"')
                                 .append($('<div class="editor"/>').text('function foo(items) {\n    var x = "All this is syntax highlighted";\n    return x;\n}')))
-                        .append($('<div class="panel-footer"/>')
-                            .append(lang)
-                            .append($('<button class="btn btn-primary btn-large pull-right submission-submit"/>')
-                                .text('Submit')
-                                .prepend($('<span class="glyphicon glyphicon-share"/>')))))
+                        .append(submit))
+                    .append($('<div class="submission-status"/>').hide()
+                        .append($('<h1/>').text('Grading...'))
+                        .append($('<button class="btn btn-primary btn-large pull-right submission-resubmit"/>')
+                            .text('Resubmit')
+                            .prepend($('<span class="glyphicon glyphicon-edit"/>')).click(function () {
+                                panel.find('.submission-edit-panel').slideDown();
+                                panel.find('.submission-status').slideUp();
+                            })))
                     .appendTo('main');
 
                 var editor = ace.edit(panel.find('.editor').get(0));
@@ -318,6 +351,11 @@
                 editor.setTheme('ace/theme/github');
                 lang.change(function () {
                     editor.getSession().setMode('ace/mode/' + lang.find('option:selected').attr('data-ace'));
+                });
+                submit.click(function () {
+                    panel.find('.submission-edit-panel').slideUp();
+                    var status = panel.find('.submission-status');
+                    status.slideDown().attr('data-sub-id', grade(editor.getValue(), status));
                 });
                 var tab = $('<li style="min-width:140px"/>', {id: 'submit-' + code, role: 'presentation'})
                         .append($('<a/>', {href: '#'}).text(code)

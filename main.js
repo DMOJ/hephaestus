@@ -61,6 +61,13 @@ app.on('ready', function () {
         });
     }).on('fullscreen', function () {
         mainWindow.setFullScreen(!mainWindow.isFullScreen());
+    }).on('grade', function (event, id, code) {
+        console.log('Submission request: ' + id);
+        console.log(code);
+        setTimeout(function () {
+            console.log('Done: ' + id)
+            event.sender.send('grading-done', id);
+        }, 10000);
     });
 
     mainWindow.webContents.on('new-window', function (event, url) {
