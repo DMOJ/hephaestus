@@ -2,3 +2,7 @@
 	path = ace
 	url = https://github.com/DMOJ/hephaestus-ace.git
 	branch = master
+[submodule "pagedown"]
+	path = pagedown
+	url = https://github.com/DMOJ/dmoj-pagedown.git
+	branch = master
