@@ -40,6 +40,7 @@ app.on('ready', function () {
 
     // TODO: configurable
     var dir = 'D:\\Dropbox\\problems\\';
+    var timers = {};
     ipc.on('load-problems', function () {
         var wrench = require('wrench');
 
@@ -64,17 +65,23 @@ app.on('ready', function () {
     }).on('grade', function (event, id, code) {
         console.log('Submission request: ' + id);
         console.log(code);
-        setTimeout(function () {
-            console.log('Done: ' + id)
+        timers[id] = setTimeout(function () {
+            console.log('Done: ' + id);
             event.sender.send('grading-done', id);
+            delete timers[id];
         }, 10000);
+    }).on('abort', function (event, id) {
+        if (id in timers) {
+            console.log('Aborted: ' + id);
+            clearTimeout(timers[id]);
+            event.sender.send('grading-done', id);
+            delete timers[id];
+        } else console.log('Failed to abort: ' + id);
     });
 
     mainWindow.webContents.on('new-window', function (event, url) {
         event.preventDefault();
     });
-
-    mainWindow.openDevTools();
 
     // Emitted when the window is closed.
     mainWindow.on('closed', function () {

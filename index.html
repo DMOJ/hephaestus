@@ -191,6 +191,10 @@
             return sub_id;
         }
 
+        function abort_submission(id) {
+            ipc.send('abort', id);
+        }
+
         ipc.on('executors', function (list) {
             supported = {};
             list.forEach(function (i) {
@@ -226,7 +230,7 @@
             if (sub_queue.length) {
                 ipc.send('grade', sub_queue[0][0], sub_queue[0][1]);
                 sub_queue.unshift();
-            }
+            } else grading = false;
         });
 
         $(document).ready(function () {
@@ -333,7 +337,9 @@
                             .text('Resubmit')
                             .prepend($('<span class="glyphicon glyphicon-edit"/>')).click(function () {
                                 panel.find('.submission-edit-panel').slideDown();
-                                panel.find('.submission-status').slideUp();
+                                var id = parseInt(panel.find('.submission-status').slideUp().attr('data-sub-id'));
+                                if (id in sub_map)
+                                    abort_submission(id);
                             })))
                     .appendTo('main');
 
