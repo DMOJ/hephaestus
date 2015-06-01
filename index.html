@@ -293,7 +293,7 @@
                 var code = $('#problem-detail').find('h1').text();
                 var lang = $('<select class="language"/>');
                 var panel = $('<div class="tab-panel submission-panel"/>')
-                    .append($('<div class="panel panel-primary"/>')
+                    .append($('<div class="panel panel-primary submission-edit-panel"/>')
                         .append($('<div class="panel-heading"/>').text('Submit ' + code))
                         .append($('<div class="panel-body" style="padding:0"/>"')
                                 .append($('<div class="editor"/>').text('function foo(items) {\n    var x = "All this is syntax highlighted";\n    return x;\n}')))
@@ -301,7 +301,18 @@
                             .append(lang)
                             .append($('<button class="btn btn-primary btn-large pull-right submission-submit"/>')
                                 .text('Submit')
-                                .prepend($('<span class="glyphicon glyphicon-share"/>')))))
+                                .prepend($('<span class="glyphicon glyphicon-share"/>'))).click(function () {
+                                    panel.find('.submission-edit-panel').slideUp();
+                                    panel.find('.submission-status').slideDown();
+                                })))
+                    .append($('<div class="submission-status"/>').hide()
+                        .append($('h1').text('Grading...'))
+                        .append($('<button class="btn btn-primary btn-large pull-right submission-resubmit"/>')
+                            .text('Resubmit')
+                            .prepend($('<span class="glyphicon glyphicon-edit"/>')).click(function () {
+                                panel.find('.submission-edit-panel').slideDown();
+                                panel.find('.submission-status').slideUp();
+                            })))
                     .appendTo('main');
 
                 var editor = ace.edit(panel.find('.editor').get(0));
