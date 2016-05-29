@@ -1,0 +1,61 @@
+extends base
+
+block js
+    script(type='text/javascript').
+      $(function() {
+        $('#filter').keyup(function () {
+            let rex = new RegExp($(this).val(), 'i');
+            
+            $('.searchable tr td').hide().filter(function () {
+                return rex.test($(this).text());
+            }).show();
+        });
+      });
+
+block content
+    nav
+      div(style='flex: 1')
+        #scroller-left.scroller
+          i.glyphicon.glyphicon-chevron-left
+        #scroller-right.scroller
+          i.glyphicon.glyphicon-chevron-right
+        #nav-tabs-wrapper
+          ul.nav.nav-tabs(role='tablist')
+            li#home-tab(role='presentation')
+              a(href='home.dmoj')
+                strong Home
+            li#problem-tab.active(role='presentation')
+              a(href='#')
+                strong
+                  | Problems 
+                  span#problem-count-badge.badge #{problems_list.length}
+            li#queue-tab(role='presentation')
+              a(href='queue.dmoj')
+                strong
+                  | Queue
+      // <button class="btn btn-default" id="fullscreen"><span class="glyphicon glyphicon-fullscreen"></span></button>
+    main
+      #loading(style="display:none")
+        div
+      #problem-panel.tab-panel
+        br
+        .container
+          .panel.panel-primary
+            .panel-heading
+              | Problems
+              button.btn.btn-default.btn-xs.pull-right(type='button')
+                span#reload-problems.glyphicon.glyphicon-refresh
+            .panel-body
+              .input-group
+                span#sizing-addon1.input-group-addon
+                  span.glyphicon.glyphicon-search(aria-hidden='true')
+                input#filter.form-control(type='text', placeholder='Search problems...', aria-describedby='sizing-addon1')
+            table.table
+              thead
+                tr
+                  th Code
+            div(style='margin-top: -2px; height: calc(100vh - 198px - 3em); overflow-y:auto')
+              table.table.table-hover.table-striped(style='margin-bottom:0')
+                tbody#problem-list-body.searchable
+                  each code in problems_list
+                    tr: td= code

@@ -1,0 +1,22 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    title Electron Boilerplate
+    link(href='stylesheets/main.css', rel='stylesheet', type='text/css')
+    script(src='helpers/context_menu.js')
+    script(src='helpers/external_links.js')
+    script(src='app.js')
+  body
+    .container
+      h1 #{greet}
+      p.subtitle
+        | Welcome to
+        a.js-external-link(href='http://electron.atom.io')  Electron
+        |  app running on this magnificent
+        strong  #{platform_info}
+        |  machine.
+      p.subtitle
+        | You are in
+        strong  #{env_name}
+        |  environment.

@@ -1,13 +1,16 @@
 {
-  "name": "electron-boilerplate",
-  "productName": "Electron Boilerplate",
-  "description": "Starter for your Electron application. Out of the box ready for serious stuff.",
+  "name": "dmoj-hephasteus",
+  "productName": "DMOJ Hephasteus",
+  "description": "Local DMOJ judge and problem editor.",
   "version": "0.1.0",
-  "author": "Mr Gumby",
-  "copyright": "© 2016, your company here",
+  "authors": ["Xyene", "quantum5"],
+  "copyright": "© 2016, Don Mills Online Judge",
   "main": "background.js",
   "dependencies": {
-    "fs-jetpack": "^0.9.0"
+    "fs-jetpack": "^0.9.0",
+    "mime": "^1.3.4",
+    "jade": "^1.11.0",
+    "gulp-jade": "1.1.0"
   },
   "packageNameTemplate": "{{name}}-v{{version}}-{{platform}}-{{arch}}",
   "osx": {

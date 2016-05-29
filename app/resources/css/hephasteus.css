@@ -1,0 +1,114 @@
+html, body {
+    height: 100%;
+    margin: 0
+}
+
+body {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+    -webkit-user-select: none;
+}
+
+pre {
+    -webkit-user-select: text;
+}
+
+nav {
+    margin-top:4px;
+    display: flex;
+}
+
+nav ul {
+    flex: 1;
+}
+
+main {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+}
+
+.tab-panel {
+    margin: 0em 1em 0 1em;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.submission-panel .panel-primary {
+    height: calc(100% - 1em);
+    margin-bottom: 0;
+}
+
+.editor {
+    height: 100%;
+}
+
+.submission-panel .panel-body {
+    height: calc(100% - 82px);
+}
+
+.submission-submit {
+    margin-top: -7px;
+}
+
+#loading {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.25);
+    z-index: 1000;
+}
+
+#loading div {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: url('img/load.svg');
+    background-size: 100% auto;
+    width: 50vmin;
+    height: 50vmin;
+}
+
+.scroller {
+    text-align: center;
+    cursor: pointer;
+    display: none;
+    padding: 7px;
+    padding-top: 11px;
+    white-space: no-wrap;
+    vertical-align: middle;
+    background-color: #fff;
+}
+
+#nav-tabs-wrapper {
+    position: relative;
+    margin: 0 auto;
+    overflow: hidden;
+    padding: 5px;
+    height: 50px;
+}
+
+.nav-tabs {
+    position: absolute;
+    left: 0;
+    top: 0;
+    min-width: 3000px;
+    margin-left: 0px;
+    margin-top: 0px;
+}
+
+#scroller-right{
+    float:right;
+}
+
+#scroller-left {
+    float:left;
+}
